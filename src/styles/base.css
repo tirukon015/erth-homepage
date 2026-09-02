@@ -1,0 +1,79 @@
+/* Global rules carried over from ERTH Homepage (standalone) v14, plus the
+   production-only additions noted inline. Section-level styling stays on the
+   elements themselves: the v14 markup is the design spec, so it is preserved
+   verbatim and only stateful, interactive and responsive rules live in CSS. */
+
+html, body { margin: 0; padding: 0; background: #050505; }
+
+body {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* v14 set these on a wrapper <div> that closed early, leaving the lower half
+     of the page without an inherited text colour. They belong on <body>. */
+  color: #F2F5F2;
+  min-height: 100vh;
+}
+
+* { box-sizing: border-box; }
+
+a { color: #3BE07F; text-decoration: none; }
+a:hover { color: #8BF0B8; }
+::selection { background: rgba(59, 224, 127, .3); }
+
+@keyframes erthRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes erthBreathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018); } }
+@keyframes erthDrift { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(-14px, 8px, 0); } }
+
+/* --- production additions ------------------------------------------------ */
+
+/* Every <img> carries its intrinsic width/height so the browser can reserve
+   space before the file arrives. Those attributes also act as presentational
+   hints, so height has to fall back to auto or an image sized only by CSS width
+   would be stretched to its full pixel height. */
+img { height: auto; }
+
+/* Nothing in the layout is meant to scroll sideways; decorative art that
+   deliberately overflows its section is clipped rather than made scrollable. */
+html { overflow-x: clip; }
+
+/* The header is fixed at 76px, so anchor targets need room to clear it. */
+:where(section, footer, [id])[id] { scroll-margin-top: 96px; }
+
+html:focus-within { scroll-behavior: smooth; }
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #3BE07F;
+  color: #041007;
+  font-family: Archivo, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  transition: top .2s ease;
+}
+.skip-link:focus { top: 12px; color: #041007; }
+
+/* <main> is only focusable so the skip link can land on it; it should not draw
+   a ring around the whole page when it does. */
+main[tabindex]:focus,
+main[tabindex]:focus-visible { outline: none !important; }
+
+/* A single visible focus ring for every interactive element. The prototype had
+   none, and the inline styles would otherwise win on specificity. */
+:focus-visible {
+  outline: 2px solid #3BE07F !important;
+  outline-offset: 3px !important;
+  border-radius: 4px;
+}
+
+/* Set while a dialog owns the screen. */
+body.is-locked { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; }
+  html:focus-within { scroll-behavior: auto; }
+}

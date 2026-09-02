@@ -1,0 +1,93 @@
+/* Stateful, interactive and responsive rules.
+
+   v14 expressed hover states as `style-hover="…"` attributes and expressed
+   open/closed state by rewriting inline `display` and `color` declarations from
+   a JS render loop. Both are reproduced here as CSS: hover rules need
+   `!important` because the elements they target carry inline styles, exactly as
+   the prototype's own generated stylesheet did. */
+
+/* --- hover states -------------------------------------------------------- */
+.hov-bright:hover { color: #F2F5F2 !important; }
+.hov-accent-soft:hover { color: #8BF0B8 !important; }
+.hov-opaque:hover { opacity: 1 !important; }
+.hov-menu-item:hover { background: rgba(59, 224, 127, .1) !important; color: #F2F5F2 !important; }
+.hov-cta:hover { background: #63EA9A !important; color: #041007 !important; }
+.hov-ghost:hover { border-color: rgba(255, 255, 255, .44) !important; background: rgba(255, 255, 255, .05) !important; color: #F2F5F2 !important; }
+.hov-edge-accent:hover { border-color: #3BE07F !important; color: #F2F5F2 !important; }
+.hov-edge-accent-65:hover { border-color: rgba(59, 224, 127, .65) !important; color: #F2F5F2 !important; }
+.hov-edge-accent-60:hover { border-color: rgba(59, 224, 127, .6) !important; color: #F2F5F2 !important; }
+.hov-edge-bright:hover { border-color: rgba(255, 255, 255, .45) !important; }
+
+/* --- header -------------------------------------------------------------- */
+.site-header {
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background .35s ease, border-color .35s ease;
+}
+.site-header.is-scrolled {
+  background: rgba(5, 5, 5, .86);
+  border-bottom-color: rgba(255, 255, 255, .09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* --- desktop navigation and its dropdowns -------------------------------- */
+.nav-links { display: flex; }
+.nav-desktop-only { display: inline-flex; }
+.nav-cta { display: inline-flex; }
+.nav-burger { display: none; }
+
+.nav-dropdown__trigger { color: #B4BAB4; }
+.nav-dropdown__trigger[aria-expanded='true'],
+.nav-dropdown__trigger:hover { color: #F2F5F2; }
+
+.nav-dropdown__menu { display: none; }
+.nav-dropdown__menu.is-open { display: flex; }
+
+/* --- panels that open and close ------------------------------------------ */
+.mobile-menu:not([hidden]) { display: flex; }
+.booking-dialog:not([hidden]) { display: flex; }
+.disclosure-grid:not([hidden]) { display: grid; }
+
+/* --- mobile call-to-action bar ------------------------------------------- */
+.sticky-cta { display: none; }
+
+/* --- responsive ----------------------------------------------------------
+   1080px is the breakpoint v14 used in JS (`window.innerWidth < 1080`) to swap
+   between the desktop nav and the burger menu. It is now expressed in CSS, so
+   the correct layout is painted on the first frame instead of after hydration. */
+@media (max-width: 1079.98px) {
+  .nav-links,
+  .nav-desktop-only,
+  .nav-cta { display: none; }
+  .nav-burger { display: flex; }
+  .sticky-cta { display: flex; }
+  /* Clear the sticky bar so it never covers the end of the footer. */
+  body { padding-bottom: 76px; }
+}
+
+/* Long, unbreakable strings (reward figures, e-mail addresses) must not force
+   a horizontal scrollbar on narrow phones. */
+@media (max-width: 420px) {
+  .site-header nav { gap: 12px; }
+}
+
+/* --- very narrow phones (320-380px) ---------------------------------------
+   The design pins a few pill CTAs to a single line and gives the FAQ answer
+   column a two-track span. Both are right above 360px and both overflow below
+   it, so they relax rather than push the page sideways. */
+@media (max-width: 400px) {
+  .cta-nowrap { white-space: normal !important; text-align: center; }
+  .faq-list,
+  .footer-intro { grid-column: auto !important; }
+}
+
+/* --- inline links inside body copy ---------------------------------------
+   Green on grey is only a 1.14:1 difference, so colour alone cannot carry the
+   fact that these are links (WCAG 1.4.1). An underline does, without moving
+   anything. Standalone links styled as pills or nav items are unaffected. */
+.inline-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}

@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.vite/
+
+# environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# tooling caches
+.vercel/
+.eslintcache
+.cache/
+
+# os / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
