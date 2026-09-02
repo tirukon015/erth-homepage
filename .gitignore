@@ -13,7 +13,7 @@ dist/
 *.key
 
 # tooling caches
-.vercel/
+.vercel
 .eslintcache
 .cache/
 
